@@ -97,7 +97,7 @@
     
     for (UIView *view in _resizedViews) {
         CGRect frame = view.frame;
-        frame.size.height -= frame.size.height;
+        frame.size.height -= deltaY;
         view.frame = frame;
     }
 
