@@ -79,7 +79,7 @@
         [UIView animateWithDuration:duration animations:^{
             for (UIView *view in _resizeViews) {
                 CGRect frame = view.frame;
-                frame.size.height = selfFrame.origin.y - frame.origin.y;
+                frame.size.height -= insetHeight;
                 view.frame = frame;
             }
             self.frame = selfFrame;
@@ -87,7 +87,7 @@
     } else {
         for (UIView *view in _resizeViews) {
             CGRect frame = view.frame;
-            frame.size.height = selfFrame.origin.y - frame.origin.y;
+            frame.size.height -= insetHeight;
             view.frame = frame;
         }
         self.frame = selfFrame;
@@ -97,9 +97,9 @@
 
 - (void)keyboardWillHide:(NSNotification*)notification
 {
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    CGRect selfFrame = self.frame;
-    selfFrame.origin.y = window.frame.size.height - selfFrame.size.height - 20; //Magic Number?
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat insetHeight = keyboardFrame.size.height;
     
     if (_animated) {
         NSValue *value = [[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
@@ -109,7 +109,7 @@
         [UIView animateWithDuration:duration animations:^{
             for (UIView *view in _resizeViews) {
                 CGRect frame = view.frame;
-                frame.size.height = selfFrame.origin.y - frame.origin.y;
+                frame.size.height += insetHeight;
                 view.frame = frame;
             }
             self.frame = selfFrame;
@@ -117,7 +117,7 @@
     } else {
         for (UIView *view in _resizeViews) {
             CGRect frame = view.frame;
-            frame.size.height = selfFrame.origin.y - frame.origin.y;
+            frame.size.height += insetHeight;
             view.frame = frame;
         }
         self.frame = selfFrame;
